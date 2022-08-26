@@ -67,12 +67,12 @@ class ChatUser {
    * @param text {string} message to send
    * */
 
-  handleJoke(user) {
+  handleJoke() {
     this.room.privateMessage({
       name: "Server",
       type: "chat",
       text: "SUPER FUNNY JOKE",
-    }, user);
+    }, this);
   }
 
   /** Handle messages from client:
@@ -91,6 +91,7 @@ class ChatUser {
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
     else if (msg.type === "get-joke") this.handleJoke(this);
+    else if (msg.type === "get-members") this.room.getMembers(this);
     else throw new Error(`bad message: ${msg.type}`);
   }
 

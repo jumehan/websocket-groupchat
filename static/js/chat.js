@@ -23,9 +23,9 @@ ws.onopen = function (evt) {
 /** called when msg received from server; displays it. */
 
 ws.onmessage = function (evt) {
-  debugger
+  debugger;
   console.log("message", evt);
-  debugger
+  debugger;
   let msg = JSON.parse(evt.data);
   let item;
 
@@ -63,16 +63,18 @@ $("form").submit(function (evt) {
   evt.preventDefault();
 
   // if input id value === "/joke", set type to "get-joke", else, set as chat
-  let data;
+  let type;
 
-  if ($("#m").val() === "/joke") {
-    data = { type: "get-joke", text: '' };
-  } else {
-    data = { type: "chat", text: $("#m").val() };
+  if ($("#m").val() === "/joke") type = "get-joke";
+  else if ($("#m").val() === "/members") type = "get-members";
+  else {
+    type ="chat";
   }
+
+  const data = { type: type, text: $("#m").val() };
 
   ws.send(JSON.stringify(data));
 
-  debugger
-  $("#m").val("");
+debugger;
+$("#m").val("");
 });

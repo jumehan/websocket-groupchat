@@ -76,6 +76,15 @@ class Room {
   privateMessage(data, user) {
     user.send(JSON.stringify(data));
   }
+
+  getMembers(user) {
+    let members = [...this.members];
+    members = members.map(e => e.name);
+    const type = "note"
+    const text = `users in room: ${members.join(", ")}`;
+    const data = { type, text};
+    user.send(JSON.stringify(data));
+  }
 }
 
 module.exports = Room;

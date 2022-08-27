@@ -75,6 +75,37 @@ class ChatUser {
     }, this);
   }
 
+  handleDM(text) {
+    //pluck out username from "/priv username"
+    const username = text.split(" ")[1];
+
+    const users = [...this.room.members]; //set of user instances
+    let user;
+    for (let u of users) {
+      if (u.name === username) {
+        user = u;
+        break;
+      }
+    } if (user) {
+      this.room.privateMessage({
+        name: this.name,
+        type: "chat",
+        text: "message",
+      }, this);
+      user.room.privateMessage({
+        name: this.name,
+        type: "chat",
+        text: "message",
+      }, user);
+
+    } else {
+      this.room.privateMessage({
+        type: "note",
+        text: `sorry, no username found: ${username}`,
+      }, this);
+    }
+  }
+
   /** Handle messages from client:
    *
    * @param jsonData {string} raw message data
@@ -90,8 +121,9 @@ class ChatUser {
 
     if (msg.type === "join") this.handleJoin(msg.name);
     else if (msg.type === "chat") this.handleChat(msg.text);
-    else if (msg.type === "get-joke") this.handleJoke(this);
+    else if (msg.type === "get-joke") this.handleJoke();
     else if (msg.type === "get-members") this.room.getMembers(this);
+    else if (msg.type === "private") this.handleDM(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
   }
 

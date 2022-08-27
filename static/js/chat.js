@@ -64,14 +64,16 @@ $("form").submit(function (evt) {
 
   // if input id value === "/joke", set type to "get-joke", else, set as chat
   let type;
+  const chatInput = $("#m").val();
 
-  if ($("#m").val() === "/joke") type = "get-joke";
-  else if ($("#m").val() === "/members") type = "get-members";
+  if (chatInput === "/joke") type = "get-joke";
+  else if (chatInput === "/members") type = "get-members";
+  else if (chatInput.startsWith("/priv")) type = "private";
   else {
     type ="chat";
   }
 
-  const data = { type: type, text: $("#m").val() };
+  const data = { type: type, text: chatInput };
 
   ws.send(JSON.stringify(data));
 
